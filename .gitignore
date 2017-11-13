@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 *.iml
 .gradle
 /local.properties
@@ -7,3 +8,6 @@
 /build
 /captures
 .externalNativeBuild
+=======
+# Add any directories, files, or patterns you don't want to be tracked by version control
+>>>>>>> 4c08a7640989d65cd7e674079cf8e22c3406e817

@@ -1,0 +1,84 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/add_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="36dp"
+        android:src="@mipmap/ic_launcher" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/add_number"
+        android:layout_marginBottom="15dp"
+        android:text="姓名："
+        android:textColor="#233"
+        android:textSize="20dp" />
+
+    <EditText
+        android:id="@+id/add_name"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textView1"
+        android:layout_toRightOf="@+id/textView1"
+        android:layout_weight="1"
+        android:ems="10"
+        android:hint="请输入姓名（必填）"
+        android:singleLine="true" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:text="电话："
+        android:textColor="#233"
+        android:textSize="20dp" />
+
+    <EditText
+        android:id="@+id/add_number"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textView2"
+        android:layout_alignLeft="@+id/add_name"
+        android:layout_weight="1"
+        android:ems="10"
+        android:hint="请输入电话（必填）"
+        android:singleLine="true" />
+
+
+    <Button
+        android:id="@+id/add_btn1"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="24dp"
+        android:layout_marginEnd="13dp"
+        android:layout_marginRight="13dp"
+        android:layout_toLeftOf="@+id/add_img"
+        android:layout_toStartOf="@+id/add_img"
+        android:background="#B0E0E6"
+        android:text="添加" />
+
+    <Button
+        android:id="@+id/add_btn2"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_alignBaseline="@+id/add_btn1"
+        android:layout_marginLeft="17dp"
+        android:layout_marginStart="17dp"
+        android:layout_toEndOf="@+id/add_img"
+        android:layout_toRightOf="@+id/add_img"
+        android:background="#B0E0E6"
+        android:text="取消" />
+
+
+</RelativeLayout>

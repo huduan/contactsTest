@@ -46,19 +46,20 @@
         android:id="@+id/imageButton1"
         android:layout_width="45dp"
         android:layout_height="45dp"
-        android:gravity="center_vertical"
         android:layout_marginTop="8dp"
         android:focusable="false"
+        android:gravity="center_vertical"
         android:src="@android:drawable/ic_menu_call" />
 
     <ImageButton
         android:id="@+id/imageButton2"
         android:layout_width="45dp"
         android:layout_height="45dp"
-        android:gravity="center_vertical"
         android:layout_marginRight="5dp"
         android:layout_marginTop="8dp"
         android:focusable="false"
+        android:gravity="center_vertical"
         android:src="@android:drawable/sym_action_email" />
+
 
 </LinearLayout>

@@ -3,4 +3,5 @@
     <string name="btn_add">新建联系人</string>
     <string name="add_name">姓名</string>
     <string name="add_phone">电话号码</string>
+    <string name="refuse_read_contacts">你拒绝了读取联系人的请求</string>
 </resources>

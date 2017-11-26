@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".activity.MainActivity"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,10 +23,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AddActivity"
+            android:name=".activity.AddActivity"
             android:label="添加联系人界面" />
         <activity
-            android:name=".EditActivity"
+            android:name=".activity.EditActivity"
             android:label="修改联系人界面" />
     </application>
 

@@ -9,8 +9,8 @@ public class ContactItem {
     private int phone;
     private int message;
     private String contactName;
-
     private String phoneNumber;
+    private String sortkey;
 
     public int getImg() {
         return img;
@@ -52,8 +52,12 @@ public class ContactItem {
         this.phoneNumber = phoneNumber;
     }
 
-    @Override
-    public String toString() {
-        return "name " + contactName + " , " + phoneNumber;
+
+    public String getSortkey() {
+        return sortkey;
+    }
+
+    public void setSortkey(String sortkey) {
+        this.sortkey = sortkey;
     }
 }

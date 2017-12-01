@@ -16,16 +16,17 @@ import android.widget.TextView;
 import com.huduan.contactstest.R;
 import com.huduan.contactstest.model.ContactItem;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by huduan on 17-11-24.
  */
 
 public class MyListAdapter extends BaseAdapter {
+    private static final String TAG = "MyListAdapter";
 
     private Context mContext;
-    private List<ContactItem> listItems;
+    private ArrayList<ContactItem> listItems;
     private LayoutInflater layoutInflater;
 
     public MyListAdapter(Context context) {
@@ -33,11 +34,16 @@ public class MyListAdapter extends BaseAdapter {
         layoutInflater = LayoutInflater.from(context);
     }
 
-    public List<ContactItem> getListItems() {
+    public void updateContactList(ArrayList<ContactItem> contactList) {
+        this.listItems = contactList;
+        notifyDataSetChanged();
+    }
+
+    public ArrayList<ContactItem> getListItems() {
         return listItems;
     }
 
-    public void setListItems(List<ContactItem> listItems) {
+    public void setListItems(ArrayList<ContactItem> listItems) {
         this.listItems = listItems;
     }
 
@@ -58,10 +64,9 @@ public class MyListAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
+        Log.d(TAG, "getView: " + convertView);
 
         ViewHolder viewHolder = null;
-        Log.d("huduan", "getView:aaa");
-
         if (convertView == null) {
             viewHolder = new ViewHolder();
             convertView = layoutInflater.inflate(R.layout.contact_item, parent, false);

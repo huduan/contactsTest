@@ -22,13 +22,18 @@ import java.util.Objects;
 
 public class ContactsDao {
 
-    private Context mContext = null;
+    private Context mContext;
+
+
+    public static void batchInsert(Context context) {
+
+    }
 
     //增
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public void insert(String name, String phoneNum) {
+    public static void insert(Context context, String name, String phoneNum) {
         ContentValues values = new ContentValues();
-        Uri rawContactUri = mContext.getContentResolver().insert(
+        Uri rawContactUri = context.getContentResolver().insert(
                 ContactsContract.RawContacts.CONTENT_URI, values);
         long rawContactId = ContentUris.parseId(rawContactUri);
         // 向data表插入姓名
@@ -37,7 +42,7 @@ public class ContactsDao {
             values.put(ContactsContract.Data.RAW_CONTACT_ID, rawContactId);
             values.put(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE);
             values.put(ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME, name);
-            mContext.getContentResolver().insert(ContactsContract.Data.CONTENT_URI,
+            context.getContentResolver().insert(ContactsContract.Data.CONTENT_URI,
                     values);
         }
         // 向data表插入电话号码
@@ -47,22 +52,22 @@ public class ContactsDao {
             values.put(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
             values.put(ContactsContract.CommonDataKinds.Phone.NUMBER, phoneNum);
             values.put(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE);
-            mContext.getContentResolver().insert(ContactsContract.Data.CONTENT_URI,
+            context.getContentResolver().insert(ContactsContract.Data.CONTENT_URI,
                     values);
         }
 
     }
 
     //删
-    public void delete(long rawContactId) {
+    public static void delete(Context context, long rawContactId) {
 
-        mContext.getContentResolver().delete(
+        context.getContentResolver().delete(
                 ContentUris.withAppendedId(ContactsContract.RawContacts.CONTENT_URI,
                         rawContactId), null, null);
 
     }
 
-    public void update(long rawContactId) {
+    public static void update(Context context, long rawContactId) {
         ContentValues values = new ContentValues();
         values.put(ContactsContract.CommonDataKinds.Phone.NUMBER, "13800138000");
         values.put(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE);
@@ -70,14 +75,15 @@ public class ContactsDao {
                 + ContactsContract.Data.MIMETYPE + "=?";
         String[] selectionArgs = new String[]{String.valueOf(rawContactId),
                 ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE};
-        mContext.getContentResolver().update(ContactsContract.Data.CONTENT_URI, values,
+        context.getContentResolver().update(ContactsContract.Data.CONTENT_URI, values,
                 where, selectionArgs);
 
     }
 
-    public List<ContactItem> query() {
+
+    public static List<ContactItem> query(Context context) {
         // 获取用来操作数据的类的对象，对联系人的基本操作都是使用这个对象
-        ContentResolver cr = mContext.getContentResolver();
+        ContentResolver cr = context.getContentResolver();
         // 查询contacts表的所有记录
         Cursor cursor = cr.query(ContactsContract.Contacts.CONTENT_URI, null,
                 null, null, null);

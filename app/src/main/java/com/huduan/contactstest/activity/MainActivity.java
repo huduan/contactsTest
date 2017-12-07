@@ -19,12 +19,16 @@ import android.widget.ListView;
 
 import com.huduan.contactstest.R;
 import com.huduan.contactstest.model.ContactItem;
+import com.huduan.contactstest.service.FloatService;
+import com.huduan.contactstest.service.LauncherService;
 import com.huduan.contactstest.ui.adapter.MyListAdapter;
+import com.huduan.contactstest.ui.view.LocalSearchView;
 import com.huduan.contactstest.utils.LocalContactSearch;
 import com.huduan.contactstest.utils.PinyinComparator;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText et_search;
     private Button bt_add;
+
+    private LocalSearchView mSearchView;
 
 
     public void onCreate(Bundle savedInstanceState) {
@@ -49,6 +55,15 @@ public class MainActivity extends AppCompatActivity {
         shListView = findViewById(R.id.lvPhones_search);
         shListView.setAdapter(shAdapter);
 
+        //mSearchView = new LocalSearchView(this);
+
+//        mSearchView.setTextChangedCallback(new com.huduan.contactstest.ui.view.LocalSearchView.ITextChanged() {
+//            @Override
+//            public void onTextChanged() {
+//
+//            }
+//        });
+
         //搜索
         et_search = findViewById(R.id.et_search);
         et_search.addTextChangedListener(new TextWatcher() {
@@ -60,13 +75,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s != null && s.length() > 0) {
-                    ArrayList<ContactItem> listG = LocalContactSearch.searchContact(s, myAdapter.getListItems());
+                    List<ContactItem> listG = LocalContactSearch.searchContact(s, myAdapter.getListItems());
                     shAdapter.updateContactList(listG);
                     setSearchListVisibility(true);
                 } else {
                     setSearchListVisibility(false);
                 }
             }
+
             private void setSearchListVisibility(boolean isVisible) {
                 if (isVisible) {
                     shListView.setVisibility(View.VISIBLE);
@@ -144,13 +160,38 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //启动服务
+        Intent foreIntent = new Intent(this, LauncherService.class);
+        startService(foreIntent);
+        Intent floatIntent = new Intent(this, FloatService.class);
+        startService(floatIntent);
+    }
 
     @Override
     protected void onResume() {
         super.onResume();
         loadContacts();
+        //停止服务
+        Intent foreIntent = new Intent(this, LauncherService.class);
+        stopService(foreIntent);
+        Intent floatIntent = new Intent(this, FloatService.class);
+        stopService(floatIntent);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Intent foreIntent = new Intent(this, LauncherService.class);
+        startService(foreIntent);
+        Intent floatIntent = new Intent(this, FloatService.class);
+        startService(floatIntent);
+
     }
 
     //读取联系人

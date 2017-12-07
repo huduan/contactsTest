@@ -59,7 +59,7 @@
         android:layout_marginTop="8dp"
         android:focusable="false"
         android:gravity="center_vertical"
-        android:src="@android:drawable/sym_action_email" />
+        android:src="@android:drawable/ic_menu_send" />
 
 
 </LinearLayout>

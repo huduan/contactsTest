@@ -10,7 +10,7 @@
         android:layout_above="@+id/edit_name"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="5dp"
-        android:src="@mipmap/ic_launcher" />
+        android:src="@mipmap/ic_launcher_round" />
 
     <TextView
         android:id="@+id/textView1"

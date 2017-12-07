@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.huduan.contactstest.model.ContactItem;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,11 +20,12 @@ public class LocalContactSearch {
      *
      * @param str
      */
-    public static ArrayList<ContactItem> searchContact(CharSequence str, ArrayList<ContactItem> allContacts) {
+    public static List<ContactItem> searchContact(CharSequence str, List<ContactItem> allContacts) {
 
-        ArrayList<ContactItem> contactItemList = new ArrayList<>();
+        Preconditions.checkNotNull(allContacts);
+        List<ContactItem> contactItemList = new ArrayList<>();
+
         // 如果搜索条件以0 1 +开头则按号码搜索
-
         if (str.toString().startsWith("0") || str.toString().startsWith("1")
                 || str.toString().startsWith("+")) {
             for (ContactItem contactItem : allContacts) {
@@ -37,8 +39,8 @@ public class LocalContactSearch {
             }
             return contactItemList;
         }
-        CharacterParser finder = CharacterParser.getInstance();
 
+        CharacterParser finder = CharacterParser.getInstance();
         String result = "";
         for (ContactItem contactItem : allContacts) {
             // 先将输入的字符串转换为拼音
@@ -55,7 +57,6 @@ public class LocalContactSearch {
 
     /**
      * 根据拼音搜索
-     *
      */
     private static boolean contains(ContactItem contactItem, String search) {
         if (TextUtils.isEmpty(contactItem.getPhoneNumber())

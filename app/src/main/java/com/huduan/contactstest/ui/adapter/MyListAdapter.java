@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.huduan.contactstest.R;
 import com.huduan.contactstest.model.ContactItem;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by huduan on 17-11-24.
@@ -26,7 +26,7 @@ public class MyListAdapter extends BaseAdapter {
     private static final String TAG = "MyListAdapter";
 
     private Context mContext;
-    private ArrayList<ContactItem> listItems;
+    private List<ContactItem> listItems;
     private LayoutInflater layoutInflater;
 
     public MyListAdapter(Context context) {
@@ -34,16 +34,16 @@ public class MyListAdapter extends BaseAdapter {
         layoutInflater = LayoutInflater.from(context);
     }
 
-    public void updateContactList(ArrayList<ContactItem> contactList) {
+    public void updateContactList(List<ContactItem> contactList) {
         this.listItems = contactList;
         notifyDataSetChanged();
     }
 
-    public ArrayList<ContactItem> getListItems() {
+    public List<ContactItem> getListItems() {
         return listItems;
     }
 
-    public void setListItems(ArrayList<ContactItem> listItems) {
+    public void setListItems(List<ContactItem> listItems) {
         this.listItems = listItems;
     }
 

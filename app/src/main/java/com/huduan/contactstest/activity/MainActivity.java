@@ -5,6 +5,7 @@ import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
@@ -22,8 +23,9 @@ import com.huduan.contactstest.model.ContactItem;
 import com.huduan.contactstest.service.FloatService;
 import com.huduan.contactstest.service.LauncherService;
 import com.huduan.contactstest.ui.adapter.MyListAdapter;
-import com.huduan.contactstest.ui.view.LocalSearchView;
+import com.huduan.contactstest.utils.LoadTask;
 import com.huduan.contactstest.utils.LocalContactSearch;
+import com.huduan.contactstest.utils.MyDatabaseHelper;
 import com.huduan.contactstest.utils.PinyinComparator;
 
 import java.util.ArrayList;
@@ -31,6 +33,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    private MyDatabaseHelper databaseHelper;
 
     private ListView mListView;
     private ListView shListView;
@@ -40,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText et_search;
     private Button bt_add;
 
-    private LocalSearchView mSearchView;
+    //private LocalSearchView mSearchView;
 
 
     public void onCreate(Bundle savedInstanceState) {
@@ -55,8 +59,8 @@ public class MainActivity extends AppCompatActivity {
         shListView = findViewById(R.id.lvPhones_search);
         shListView.setAdapter(shAdapter);
 
-        //mSearchView = new LocalSearchView(this);
-
+//        mSearchView = new LocalSearchView(this);
+//
 //        mSearchView.setTextChangedCallback(new com.huduan.contactstest.ui.view.LocalSearchView.ITextChanged() {
 //            @Override
 //            public void onTextChanged() {
@@ -107,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
 
         //点击item进入编辑联系人界面
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -160,7 +165,9 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
-
+        //异步读取
+        new LoadTask(this).execute();
+        //createDatabase();
     }
 
     @Override
@@ -181,6 +188,7 @@ public class MainActivity extends AppCompatActivity {
         Intent foreIntent = new Intent(this, LauncherService.class);
         stopService(foreIntent);
         Intent floatIntent = new Intent(this, FloatService.class);
+        floatIntent.putExtra("extra", "action_1");
         stopService(floatIntent);
     }
 
@@ -199,25 +207,25 @@ public class MainActivity extends AppCompatActivity {
     //注意一个联系人多个号码及联系人姓名相同的情况(待完善)
 
     private void loadContacts() {
+        databaseHelper = new MyDatabaseHelper(this, "contacts.db", null, 1);
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
         ArrayList<ContactItem> contactItems = new ArrayList<>();
-        ContentResolver resolver = getContentResolver();
         Cursor cursor = null;
         try {
-            cursor = resolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
-                    null, null, null);
+            cursor = db.query("Contacts", null, null, null, null, null, null);
             if (cursor != null) {
                 while (cursor.moveToNext()) {
                     ContactItem contactItem = new ContactItem();
 
                     //联系人名称
                     String contactName = cursor.getString(cursor.
-                            getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                            getColumnIndex("name"));
                     //读取电话号码
                     String phoneNumber = cursor.getString(cursor.
-                            getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                            getColumnIndex("number"));
                     //读取sortKey
                     String sortKey = cursor.getString(cursor.
-                            getColumnIndex(ContactsContract.CommonDataKinds.Phone.SORT_KEY_PRIMARY));
+                            getColumnIndex("sortKey"));
                     contactItem.setContactName(contactName);
                     contactItem.setPhoneNumber(phoneNumber);
                     contactItem.setSortkey(sortKey);
@@ -234,4 +242,51 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    //contacts数据库
+//    private SQLiteDatabase createDatabase() {
+//        databaseHelper = new MyDatabaseHelper(this, "contacts.db", null, 1);
+//        return databaseHelper.getWritableDatabase();
+//    }
+
+    //批量添加联系人数据
+//    private void batchAddContacts(List<ContactItem> list) throws RemoteException, OperationApplicationException {
+//
+//        ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+//        int rawContactInsertIndex = 0;
+//        for (ContactItem contact : list) {
+//            rawContactInsertIndex = ops.size(); // 有了它才能给真正的实现批量添加
+//
+//            ops.add(ContentProviderOperation.newInsert(ContactsContract.RawContacts.CONTENT_URI)
+//                    .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null)
+//                    .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, null)
+//                    .withYieldAllowed(true).build());
+//
+//            // 添加姓名
+//            ops.add(ContentProviderOperation
+//                    .newInsert(
+//                            android.provider.ContactsContract.Data.CONTENT_URI)
+//                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID,
+//                            rawContactInsertIndex)
+//                    .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
+//                    .withValue(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME, contact.getContactName())
+//                    .withYieldAllowed(true).build());
+//            // 添加号码
+//            ops.add(ContentProviderOperation
+//                    .newInsert(
+//                            android.provider.ContactsContract.Data.CONTENT_URI)
+//                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID,
+//                            rawContactInsertIndex)
+//                    .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
+//                    .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, contact.getPhoneNumber())
+//                    .withValue(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
+//                    .withValue(ContactsContract.CommonDataKinds.Phone.LABEL, "").withYieldAllowed(true).build());
+//        }
+//        if (ops != null) {
+//            // 真正添加
+//            ContentProviderResult[] results = getContentResolver()
+//                    .applyBatch(ContactsContract.AUTHORITY, ops);
+//
+//        }
+//    }
 }

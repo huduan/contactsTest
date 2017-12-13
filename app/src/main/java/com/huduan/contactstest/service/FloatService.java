@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,6 +23,9 @@ public class FloatService extends Service {
     WindowManager mWindowManager;
     ImageView mFloatView;
 
+    private static final String TAG = "FloatService";
+
+
     public FloatService() {
     }
 
@@ -30,6 +34,7 @@ public class FloatService extends Service {
     public void onCreate() {
         super.onCreate();
         createFloatView();
+        Log.d(TAG, "onCreate: ");
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
@@ -135,6 +140,7 @@ public class FloatService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.d(TAG, "onStartCommand: " + intent);
         return super.onStartCommand(intent, flags, startId);
     }
 

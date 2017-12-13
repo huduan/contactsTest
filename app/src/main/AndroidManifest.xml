@@ -38,7 +38,13 @@
         <service
             android:name=".service.FloatService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
+
+        <provider
+            android:name=".utils.MyContentProvider"
+            android:authorities="com.huduan.contactstest.provider"
+            android:enabled="true"
+            android:exported="true"></provider>
     </application>
 
 </manifest>
